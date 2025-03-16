@@ -11,13 +11,20 @@ export default class ProductData {
     this.category = category;
     this.path = `../json/${this.category}.json`;
   }
-  getData() {
-    return fetch(this.path)
-      .then(convertToJson)
-      .then((data) => data);
-  }
+
   async findProductById(id) {
     const products = await this.getData();
     return products.find((item) => item.Id === id);
+  }
+
+  // Ensure Data Loads Before Searching.
+  async getData() {
+    try {
+      this.fullList = await fetch(this.path).then(convertToJson);
+      return this.fullList;
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+      return []; // Return empty array if fetch fails
+    }
   }
 }

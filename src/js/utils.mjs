@@ -41,9 +41,12 @@ export function renderListWithTemplate(
 
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
-  qs(selector).addEventListener("touchend", (event) => {
-    event.preventDefault();
-    callback();
-  });
-  qs(selector).addEventListener("click", callback);
+  const element = qs(selector);
+  if (element) {
+    element.addEventListener("touchend", (event) => {
+      event.preventDefault();
+      callback();
+    });
+    element.addEventListener("click", callback);
+  }
 }
