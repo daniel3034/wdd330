@@ -1,3 +1,5 @@
+const baseURL = import.meta.env.VITE_SERVER_URL;
+
 function convertToJson(res) {
   if (res.ok) {
     return res.json();
@@ -11,20 +13,18 @@ export default class ProductData {
     this.category = category;
     this.path = `../json/${this.category}.json`;
   }
-
-  async findProductById(id) {
-    const products = await this.getData();
-    return products.find((item) => item.Id === id);
+  getData() {
+    return fetch(this.path)
+      .then(convertToJson)
+      .then((data) => data.Result)
+      .catch((error) => {
+        console.error('Error fetching product data:', error);
+        return []; // Return empty array if fetch fails
+      });
   }
 
-  // Ensure Data Loads Before Searching.
-  async getData() {
-    try {
-      this.fullList = await fetch(this.path).then(convertToJson);
-      return this.fullList;
-    } catch (error) {
-      console.error("Error fetching product data:", error);
-      return []; // Return empty array if fetch fails
-    }
+  async findProductById(id, category) {
+    const products = await this.getData(category);
+    return products.find((item) => item.Id === id);
   }
 }
