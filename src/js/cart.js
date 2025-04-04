@@ -43,6 +43,7 @@ const cartItemTemplate = (
       <input type="number" id="quantity-${index}" data-index="${index}" value="${quantity || 1}" min="1" />
     </div>
     <p class="cart-card__price">$${finalPrice.toFixed(2)}</p>
+    <button class="remove-item" data-index="${index}">Remove</button>
   </li>
   `;
 };
@@ -68,6 +69,23 @@ const addQuantityListeners = () => {
   });
 };
 
+const addRemoveListeners = () => {
+  document.querySelectorAll('.remove-item').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      const index = event.target.dataset.index;
+      removeFromCart(index);
+    });
+  });
+};
+
+const removeFromCart = (index) => {
+  let cartItems = getCart();
+  cartItems.splice(index, 1); // Remove item at given index
+  setCart(cartItems);
+  renderCartContents(); // Refresh cart
+  showUpdateCartBadge(); // Update badge
+};
+
 const renderCartContents = () => {
   const cartItems = getCart();
   const htmlItems = cartItems.map((item, index) =>
@@ -75,6 +93,7 @@ const renderCartContents = () => {
   );
   document.querySelector('.product-list').innerHTML = htmlItems.join('');
   addQuantityListeners(); // Add listeners for quantity changes
+  addRemoveListeners();   // New function for remove buttons
   qs('#total').innerHTML = getCartTotal(cartItems).toFixed(2);
   if (cartItems.length > 0) {
     qs('#cart-footer').classList.remove('hide');
