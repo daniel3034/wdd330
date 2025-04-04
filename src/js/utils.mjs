@@ -28,27 +28,34 @@ export const getParam = (param) => {
   return urlParams.get(param);
 };
 
+export const getCart = () => getLocalStorage('so-cart') || [];
+
+export const setCart = (cart = []) => setLocalStorage('so-cart', cart);
+
 export const addProductToCart = (product) => {
-  const cartItems = getLocalStorage('so-cart') || [];
-  const existingItemIndex = cartItems.findIndex(item => item.Id === product.Id);
+  const cartItems = getCart();
+  const existingItemIndex = cartItems.findIndex(
+    (item) => item.Id === product.Id,
+  );
 
   if (existingItemIndex > -1) {
     // If product already exists, update its quantity
-    cartItems[existingItemIndex].quantity += product.quantity;
+    cartItems[existingItemIndex].quantity += 1;
   } else {
     // Otherwise, add the product to the cart
+    product.quantity = 1;
     cartItems.push(product);
   }
-
-  setLocalStorage('so-cart', cartItems);
+  setCart(cartItems);
+  showUpdateCartBadge();
 };
 
 export const renderListWithTemplate = (
   templateFunction,
   parentElement,
   list,
-  position = 'afterBegin',
   clear = false,
+  position = 'afterBegin',
 ) => {
   const htmlStrins = list.map(templateFunction);
   if (clear) {
@@ -57,8 +64,8 @@ export const renderListWithTemplate = (
   parentElement.insertAdjacentHTML(position, htmlStrins.join(''));
 };
 
-export const renderWithTemplate = (template, parentElement, data, callback) => {
-  parentElement.innerHTML = template;
+export const renderWithTemplate = (template, container, data, callback) => {
+  container.innerHTML = template;
   if (callback) {
     callback(data);
   }
@@ -77,4 +84,26 @@ export const loadHeaderFooter = async () => {
 
   renderWithTemplate(header, headerElement);
   renderWithTemplate(footer, footerElement);
+  showUpdateCartBadge();
+};
+
+export const getCartTotal = (cartItems) =>
+  cartItems.reduce(
+    (acc, { FinalPrice: price, quantity }) => acc + price * quantity,
+    0,
+  );
+
+export const getCartTotalItems = (cartItems) =>
+  cartItems.reduce((acc, { quantity }) => acc + quantity, 0);
+
+export const showUpdateCartBadge = () => {
+  const totalItems = getCartTotalItems(getCart());
+  const cartBadgeWrapperElement = qs('#cart-badge-wrapper');
+  const cartBadgeElement = qs('#cart-badge');
+  if (totalItems > 0) {
+    cartBadgeElement.innerHTML = totalItems;
+    cartBadgeWrapperElement.classList.remove('hide');
+  } else {
+    cartBadgeWrapperElement.classList.add('hide');
+  }
 };

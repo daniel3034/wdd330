@@ -1,28 +1,94 @@
 <!doctype html>
 
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-  <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleep Outside | Checkout</title>
 
-  <title>Sleep Outside | Checkout</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="../js/checkout.js" type="module"></script>
+  </head>
 
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="../js/checkout.js" type="module"></script>
-</head>
+  <body>
+    <header class="divider" id="header"></header>
 
-<body>
-  <header class="divider" id="header"></header>
+    <main class="divider">
+      <section class="products">
+        <h2>Review & Place your Order</h2>
+      </section>
+      <div id="order-summary"></div>
+      <form id="form" method="get" action="review.html" class="checkout-form">
+        <fieldset>
+          <label
+            >First Name<span class="required">*</span>
+            <input type="text" name="fname" id="f-name" required autocomplete />
+          </label>
+          <label
+            >Last Name<span class="required">*</span>
+            <input type="text" name="lname" id="l-name" required autocomplete />
+          </label>
+        </fieldset>
+        <fieldset>
+          <label
+            >Address<span class="required">*</span>
+            <input
+              type="text"
+              name="street"
+              id="street"
+              required
+              autocomplete
+            />
+          </label>
+          <label
+            >City<span class="required">*</span>
+            <input type="text" name="city" id="city" required autocomplete />
+          </label>
+          <label
+            >State<span class="required">*</span>
+            <input type="text" name="state" id="state" required autocomplete />
+          </label>
+          <label
+            >Zip Cope<span class="required">*</span>
+            <input type="text" name="zip" id="zipCode" required autocomplete />
+          </label>
+        </fieldset>
+        <fieldset>
+          <label
+            >Card Number<span class="required">*</span>
+            <input
+              type="text"
+              inputmode="numeric"
+              name="cardNumber"
+              id="card-number"
+              pattern="\d{13,16}"
+              required
+              autocomplete
+            />
+          </label>
+          <label
+            >Expiration Date<span class="required">*</span>
+            <input
+              type="month"
+              name="expiration"
+              id="expiration"
+              required
+              autocomplete
+            />
+          </label>
+          <label
+            >CVV<span class="required">*</span>
+            <input type="text" name="code" id="cvv" required />
+          </label>
+        </fieldset>
+        <fieldset>
+          <input type="submit" role="button" value="Place My Order" />
+        </fieldset>
+      </form>
+    </main>
 
-  <main class="divider">
-    <section class="products">
-      <h2>Review & Place your Order</h2>
-    </section>
-  </main>
-
-  <footer id="footer"></footer>
-</body>
-
+    <footer id="footer"></footer>
+  </body>
 </html>
